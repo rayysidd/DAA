@@ -16,6 +16,7 @@ public class sorting {
             System.out.println("Insertion Sort Time: " + measureSortingTime(randomArray, "Insertion") + " ms");
             System.out.println("Tournament Sort Time: " + measureSortingTime(randomArray, "Tournament") + " ms");
             System.out.println("Quick Sort Time: " + measureSortingTime(randomArray, "Quick") + " ms");
+            System.out.println("Merge Sort Time: " + measureSortingTime(randomArray, "Merge") + " ms");
 
         }
     }
@@ -49,6 +50,10 @@ public class sorting {
             case "Quick":
                 quickSort(copy, 0, copy.length - 1);
                 break;
+            case "Merge":
+                mergeSort(arr, 0, copy.length - 1);
+                break;
+
         }
         long endTime = System.nanoTime();
         return (endTime - startTime) / 1000000;
@@ -184,5 +189,40 @@ public class sorting {
         arr[j] = temp;
 
         return j;
+    }
+
+    public static void mergeSort(int[] arr, int l, int r) {
+        if (l >= r) {
+            return;
+        }
+        int mid = (l + r) / 2;
+        mergeSort(arr, l, mid);
+        mergeSort(arr, mid + 1, r);
+        merge(arr, l, mid, r);
+    }
+
+    public static void merge(int[] arr, int l, int mid, int r) {
+
+        int[] temp = new int[r - l + 1];
+
+        int i = l, j = mid + 1, k = 0;
+
+        while (i <= mid && j <= r) {
+            if (arr[i] <= arr[j]) {
+                temp[k++] = arr[i++];
+            } else {
+                temp[k++] = arr[j++];
+            }
+        }
+        for (; i <= mid; i++) {
+            temp[k++] = arr[i];
+        }
+        for (; j <= r; j++) {
+            temp[k++] = arr[j];
+        }
+
+        for (i = 0; i < temp.length; i++) {
+            arr[l + i] = temp[i];
+        }
     }
 }
