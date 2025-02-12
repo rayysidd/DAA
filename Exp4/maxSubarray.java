@@ -37,9 +37,14 @@ class MaxSubarraySum {
     }
 
     public static void main(String[] args) {
-        int arr[] = { 2, 3, -8, 7, -1, 2, 3 };
+        int[] arr = { -2, -3, 4, -1, -2, 1, 5, -3 };
         int n = arr.length;
         int maxSum = maxSubarraySum(arr, 0, n - 1);
+        System.out.print("Array:");
+        for (int num : arr) {
+            System.out.print(" " + num + " ");
+        }
+        System.out.println();
         System.out.println("Maximum Subarray Sum: " + maxSum);
     }
 }

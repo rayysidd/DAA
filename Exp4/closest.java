@@ -11,6 +11,10 @@ class ClosestPair {
             this.x = x;
             this.y = y;
         }
+
+        public String toString() {
+            return "(" + x + ", " + y + ")";
+        }
     }
 
     // Comparator to sort points by X coordinate
@@ -28,12 +32,16 @@ class ClosestPair {
     }
 
     // Brute-force method for small sets
-    static double bruteForce(Point[] points, int left, int right) {
+    static double bruteForce(Point[] points, int left, int right, Point[] closestPair) {
         double minDist = Double.MAX_VALUE;
         for (int i = left; i < right; i++) {
             for (int j = i + 1; j <= right; j++) {
                 double dist = distance(points[i], points[j]);
-                minDist = Math.min(minDist, dist);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closestPair[0] = points[i];
+                    closestPair[1] = points[j];
+                }
             }
         }
         return minDist;
@@ -45,30 +53,48 @@ class ClosestPair {
     }
 
     // Find the closest pair in a strip
-    static double closestInStrip(Point[] strip, int size, double d) {
+    static double closestInStrip(Point[] strip, int size, double d, Point[] closestPair) {
         double minDist = d;
         Arrays.sort(strip, 0, size, new YComparator());
 
         for (int i = 0; i < size; i++) {
             for (int j = i + 1; j < size && (strip[j].y - strip[i].y) < minDist; j++) {
-                minDist = Math.min(minDist, distance(strip[i], strip[j]));
+                double dist = distance(strip[i], strip[j]);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closestPair[0] = strip[i];
+                    closestPair[1] = strip[j];
+                }
             }
         }
         return minDist;
     }
 
     // Main divide and conquer function
-    static double closestPairRecursive(Point[] points, int left, int right) {
+    static double closestPairRecursive(Point[] points, int left, int right, Point[] closestPair) {
         if (right - left <= 3) { // Base case: If 3 or fewer points, use brute force
-            return bruteForce(points, left, right);
+            return bruteForce(points, left, right, closestPair);
         }
 
         int mid = (left + right) / 2;
         Point midPoint = points[mid];
 
-        double dL = closestPairRecursive(points, left, mid);
-        double dR = closestPairRecursive(points, mid + 1, right);
-        double d = Math.min(dL, dR);
+        Point[] leftClosestPair = new Point[2];
+        Point[] rightClosestPair = new Point[2];
+
+        double dL = closestPairRecursive(points, left, mid, leftClosestPair);
+        double dR = closestPairRecursive(points, mid + 1, right, rightClosestPair);
+
+        double d;
+        if (dL < dR) {
+            d = dL;
+            closestPair[0] = leftClosestPair[0];
+            closestPair[1] = leftClosestPair[1];
+        } else {
+            d = dR;
+            closestPair[0] = rightClosestPair[0];
+            closestPair[1] = rightClosestPair[1];
+        }
 
         // Create a strip containing points within distance d of the middle line
         Point[] strip = new Point[right - left + 1];
@@ -79,23 +105,29 @@ class ClosestPair {
             }
         }
 
-        return Math.min(d, closestInStrip(strip, j, d));
+        return Math.min(d, closestInStrip(strip, j, d, closestPair));
     }
 
     // Wrapper function to sort points and call recursive function
-    static double findClosestPair(Point[] points) {
+    static void findClosestPair(Point[] points) {
         Arrays.sort(points, new XComparator()); // Sort points by X
-        return closestPairRecursive(points, 0, points.length - 1);
+        Point[] closestPair = new Point[2];
+
+        double minDist = closestPairRecursive(points, 0, points.length - 1, closestPair);
+
+        System.out.println("All points:");
+        for (Point p : points) {
+            System.out.println(p);
+        }
+        System.out.println("\nThe closest pair is: " + closestPair[0] + " and " + closestPair[1]);
+        System.out.println("The closest pair distance is: " + minDist);
     }
 
     // Driver Code
     public static void main(String[] args) {
-        Point[] points = {
-                new Point(2.1, 3.2), new Point(12.3, 30.4), new Point(40.5, 50.1),
-                new Point(5.8, 1.2), new Point(12.1, 10.5), new Point(3.9, 4.8)
-        };
+        Point[] points = { new Point(2, 3), new Point(12, 30), new Point(40, 50),
+                new Point(5, 1), new Point(12, 10), new Point(3, 4) };
 
-        double minDist = findClosestPair(points);
-        System.out.println("The closest pair distance is: " + minDist);
+        findClosestPair(points);
     }
 }
