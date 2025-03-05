@@ -2,10 +2,16 @@ package Exp5;
 
 public class mergeSort {
     public static void main(String[] args) {
-        int[] arr = new int[] { 5, 1, 2, 3, 9, 4 };
-        mergeSort(arr, 0, arr.length - 1);
+        int[] arr = new int[] { 500, -250, 0, 42, -42, 7, -7, 100, -100, 3, -3, 3, -3, 250, -500 };
+        System.out.println("Unsorted:");
         for (int num : arr) {
-            System.out.println(num);
+            System.out.print(num + " ");
+        }
+        mergeSort(arr, 0, arr.length - 1);
+        System.out.println();
+        System.out.println("Sorted:");
+        for (int num : arr) {
+            System.out.print(num + " ");
         }
     }
 

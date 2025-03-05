@@ -2,11 +2,17 @@ package Exp5;
 
 public class quickSort {
     public static void main(String[] args) {
-        int[] arr = new int[] { 5, 1, 2, 3, 9, 4 };
-        quickSort(arr, 0, arr.length - 1);
-
+        int[] arr = new int[] { 0, -10, 500, -3, 2, 2, 1000000, -100000, 42, -42, 5, 1, 3, 3, 0 };
+        System.out.println("Unsorted:");
         for (int num : arr) {
-            System.out.println(num);
+            System.out.print(num + " ");
+        }
+
+        quickSort(arr, 0, arr.length - 1);
+        System.out.println();
+        System.out.println("Sorted:");
+        for (int num : arr) {
+            System.out.print(num + " ");
         }
     }
 
