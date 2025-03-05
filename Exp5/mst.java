@@ -11,7 +11,7 @@ class MSTComparison {
         int mstWeight = 0;
         List<int[]> mstEdges = new ArrayList<>();
 
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
         pq.add(new int[] { 0, startVertex, -1 });
 
         while (!pq.isEmpty()) {
