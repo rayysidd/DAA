@@ -1,54 +1,59 @@
-import java.util.Arrays;
+import java.util.*;
 
-class BellmanFord {
-    static class Edge {
-        int src, dest, weight;
-
-        Edge(int src, int dest, int weight) {
-            this.src = src;
-            this.dest = dest;
-            this.weight = weight;
-        }
-    }
-
-    static void bellmanFord(int vertices, int edges, Edge[] graph, int source) {
-        int[] distance = new int[vertices];
-        Arrays.fill(distance, Integer.MAX_VALUE);
-        distance[source] = 0;
-
-        // Relax edges |V| - 1 times
-        for (int i = 0; i < vertices - 1; i++) {
-            for (Edge edge : graph) {
-                if (distance[edge.src] != Integer.MAX_VALUE && distance[edge.src] + edge.weight < distance[edge.dest]) {
-                    distance[edge.dest] = distance[edge.src] + edge.weight;
+class Solution {
+    static int[] bellman_ford(int V,
+            ArrayList<ArrayList<Integer>> edges, int S) {
+        int[] dist = new int[V];
+        for (int i = 0; i < V; i++)
+            dist[i] = (int) (1e8);
+        dist[S] = 0;
+        // V x E
+        for (int i = 0; i < V - 1; i++) {
+            for (ArrayList<Integer> it : edges) {
+                int u = it.get(0);
+                int v = it.get(1);
+                int wt = it.get(2);
+                if (dist[u] != 1e8 && dist[u] + wt < dist[v]) {
+                    dist[v] = dist[u] + wt;
                 }
             }
         }
-
-        // Check for negative weight cycle
-        for (Edge edge : graph) {
-            if (distance[edge.src] != Integer.MAX_VALUE && distance[edge.src] + edge.weight < distance[edge.dest]) {
-                System.out.println("Graph contains a negative-weight cycle");
-                return;
+        // Nth relaxation to check negative cycle
+        for (ArrayList<Integer> it : edges) {
+            int u = it.get(0);
+            int v = it.get(1);
+            int wt = it.get(2);
+            if (dist[u] != 1e8 && dist[u] + wt < dist[v]) {
+                int temp[] = new int[1];
+                temp[0] = -1;
+                return temp;
             }
         }
-
-        // Print shortest distances
-        System.out.println("Vertex Distance from Source");
-        for (int i = 0; i < vertices; i++) {
-            System.out.println(i + "\t\t" + distance[i]);
-        }
+        return dist;
     }
+}
 
+public class belmanford {
     public static void main(String[] args) {
-        int vertices = 5, edges = 8;
-        Edge[] graph = {
-                new Edge(0, 1, -1), new Edge(0, 2, 4),
-                new Edge(1, 2, 3), new Edge(1, 3, 2),
-                new Edge(1, 4, 2), new Edge(3, 2, 5),
-                new Edge(3, 1, 1), new Edge(4, 3, -3)
+        int V = 6;
+        int S = 0;
+        ArrayList<ArrayList<Integer>> edges = new ArrayList<>() {
+            {
+                add(new ArrayList<Integer>(Arrays.asList(3, 2, 6)));
+                add(new ArrayList<Integer>(Arrays.asList(5, 3, 1)));
+                add(new ArrayList<Integer>(Arrays.asList(0, 1, 5)));
+                add(new ArrayList<Integer>(Arrays.asList(1, 5, -3)));
+                add(new ArrayList<Integer>(Arrays.asList(1, 2, -2)));
+                add(new ArrayList<Integer>(Arrays.asList(3, 4, -2)));
+                add(new ArrayList<Integer>(Arrays.asList(2, 4, 3)));
+            }
         };
 
-        bellmanFord(vertices, edges, graph, 0);
+        int[] distance = Solution.bellman_ford(V, edges, S);
+        System.out.println("Vertex\tShortest Distance from Source");
+        for (int i = 0; i < V; i++) {
+            System.out.println(i + "\t\t" + (distance[i] == Integer.MAX_VALUE ? "∞" : distance[i]));
+        }
+        System.out.println("");
     }
 }

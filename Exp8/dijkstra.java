@@ -54,12 +54,11 @@ class Dijkstra {
         int vertices = 5;
         Map<Integer, List<Edge>> graph = new HashMap<>();
 
-        graph.put(0, Arrays.asList(new Edge(1, 10), new Edge(4, 5)));
-        graph.put(1, Arrays.asList(new Edge(2, 1), new Edge(4, 2)));
-        graph.put(2, Arrays.asList(new Edge(3, 4)));
-        graph.put(3, Arrays.asList(new Edge(0, 7), new Edge(2, 6)));
-        graph.put(4, Arrays.asList(new Edge(1, 3), new Edge(2, 9), new Edge(3, 2)));
-
+        graph.put(0, Arrays.asList(new Edge(1, 7), new Edge(4, 3)));
+        graph.put(1, Arrays.asList(new Edge(2, 5), new Edge(4, 8)));
+        graph.put(2, Arrays.asList(new Edge(3, 2)));
+        graph.put(3, Arrays.asList(new Edge(0, 4), new Edge(2, 9)));
+        graph.put(4, Arrays.asList(new Edge(1, 6), new Edge(2, 1), new Edge(3, 7)));
         dijkstra(graph, 0, vertices);
     }
 }
