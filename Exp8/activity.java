@@ -2,37 +2,28 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 class ActivitySelection {
-    static class Activity {
-        int start, finish;
 
-        Activity(int start, int finish) {
-            this.start = start;
-            this.finish = finish;
-        }
-    }
-
-    static void selectActivities(Activity[] activities) {
-        Arrays.sort(activities, Comparator.comparingInt(a -> a.finish));
+    static void selectActivities(int[][] activities) {
+        Arrays.sort(activities, Comparator.comparingInt(a -> a[1]));
 
         System.out.println("Selected Activities:");
-        int lastFinishTime = activities[0].finish;
-        System.out.println("(" + activities[0].start + ", " + activities[0].finish + ")");
+        int lastFinishTime = activities[0][1];
+        System.out.println("(" + activities[0][0] + ", " + activities[0][1] + ")");
 
         for (int i = 1; i < activities.length; i++) {
-            if (activities[i].start >= lastFinishTime) {
-                System.out.println("(" + activities[i].start + ", " + activities[i].finish + ")");
-                lastFinishTime = activities[i].finish;
+            if (activities[i][0] >= lastFinishTime) {
+                System.out.println("(" + activities[i][0] + ", " + activities[i][1] + ")");
+                lastFinishTime = activities[i][1];
             }
         }
     }
 
     public static void main(String[] args) {
-        Activity[] activities = {
-                new Activity(1, 3), new Activity(2, 5),
-                new Activity(3, 9), new Activity(6, 8),
-                new Activity(5, 7), new Activity(8, 9)
-        };
 
+        int[][] activities = {
+                new int[] { 1, 3 }, new int[] { 2, 5 }, new int[] { 3, 9 }, new int[] { 4, 8 }, new int[] { 5, 7 },
+                new int[] { 8, 9 },
+        };
         selectActivities(activities);
     }
 }

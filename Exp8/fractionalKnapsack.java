@@ -1,29 +1,22 @@
 import java.util.Arrays;
-import java.util.Comparator;
 
 class FractionalKnapsack {
-    static class Item {
-        int weight;
-        int value;
-        double ratio;
 
-        Item(int weight, int value) {
-            this.weight = weight;
-            this.value = value;
-            this.ratio = (double) value / weight;
-        }
-    }
+    static double fractionalKnapsack(int[][] items, int capacity) {
+        // Sort items based on value-to-weight ratio in descending order
+        Arrays.sort(items, (a, b) -> Double.compare((double) b[1] / b[0], (double) a[1] / a[0]));
 
-    static double fractionalKnapsack(Item[] items, int capacity) {
-        Arrays.sort(items, (a, b) -> Double.compare(b.ratio, a.ratio));
         double totalValue = 0.0;
 
-        for (Item item : items) {
-            if (capacity >= item.weight) {
-                capacity -= item.weight;
-                totalValue += item.value;
+        for (int[] item : items) {
+            int weight = item[0];
+            int value = item[1];
+
+            if (capacity >= weight) {
+                capacity -= weight;
+                totalValue += value;
             } else {
-                totalValue += item.ratio * capacity;
+                totalValue += ((double) value / weight) * capacity;
                 break;
             }
         }
@@ -31,9 +24,7 @@ class FractionalKnapsack {
     }
 
     public static void main(String[] args) {
-        Item[] items = {
-                new Item(10, 60), new Item(20, 100), new Item(30, 120)
-        };
+        int[][] items = { { 10, 60 }, { 20, 100 }, { 30, 120 } };
         int capacity = 50;
         System.out.println("Maximum value in Knapsack = " + fractionalKnapsack(items, capacity));
     }
