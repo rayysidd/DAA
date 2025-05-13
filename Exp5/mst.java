@@ -40,24 +40,37 @@ class MSTComparison {
     }
 
     // Kruskal's Algorithm
-    public static void kruskal(int numVertices, List<int[]> edges) {
-        edges.sort(Comparator.comparingInt(a -> a[2])); // Sort edges by weight
+    public void kruskal(List<List<int[]>> graph) {
+        List<int[]> edges = new ArrayList<>();
+        int n = graph.size();
+        for (int u = 0; u < n; u++) {
+            for (int[] adj : graph.get(u)) {
+                int v = adj[0], w = adj[1];
+                if (u < v) {
+                    edges.add(new int[] { u, v, w });
+                }
+            }
+        }
+        edges.sort((a, b) -> Integer.compare(a[2], b[2]));
 
+        UnionFind uf = new UnionFind(n);
+        List<int[]> mst = new ArrayList<>();
         int mstWeight = 0;
-        List<int[]> mstEdges = new ArrayList<>();
-        UnionFind uf = new UnionFind(numVertices);
 
         for (int[] edge : edges) {
-            int u = edge[0], v = edge[1], weight = edge[2];
-
+            int u = edge[0], v = edge[1], w = edge[2];
             if (uf.find(u) != uf.find(v)) {
                 uf.union(u, v);
-                mstEdges.add(new int[] { u, v, weight });
-                mstWeight += weight;
+                mst.add(edge);
+                mstWeight += w;
             }
         }
 
-        System.out.println("Kruskal's MST Weight: " + mstWeight);
+        System.out.println("Edges in MST:");
+        for (int[] edge : mst) {
+            System.out.println(edge[0] + " - " + edge[1] + " : " + edge[2]);
+        }
+        System.out.println("Total weight: " + mstWeight);
     }
 
     // Union-Find (Disjoint Set)
