@@ -31,7 +31,7 @@ public class graphColor {
                 color[v] = 0;
             }
         }
-        return true;
+        return false;
     }
 
     public static boolean isSafe(int v, int c) {
